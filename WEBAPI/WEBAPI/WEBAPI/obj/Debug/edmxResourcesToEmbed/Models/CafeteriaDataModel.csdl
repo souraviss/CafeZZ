@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CafeteriaDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Category">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_dbo_Products_dbo_Categories_category_Id" FromRole="Categories" ToRole="Products" />
+  </EntityType>
+  <EntityType Name="Product">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="Name" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="CatId" Type="Guid" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="stock_Id" Type="Guid" />
+    <Property Name="category_Id" Type="Guid" />
+    <NavigationProperty Name="Category" Relationship="Self.FK_dbo_Products_dbo_Categories_category_Id" FromRole="Products" ToRole="Categories" />
+    <NavigationProperty Name="StockStatu" Relationship="Self.FK_dbo_Products_dbo_StockStatus_stock_Id" FromRole="Products" ToRole="StockStatus" />
+  </EntityType>
+  <EntityType Name="StockStatu">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Guid" Nullable="false" />
+    <Property Name="ProdId" Type="Guid" Nullable="false" />
+    <Property Name="InStock" Type="Int32" Nullable="false" />
+    <Property Name="OutStock" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Products" Relationship="Self.FK_dbo_Products_dbo_StockStatus_stock_Id" FromRole="StockStatus" ToRole="Products" />
+  </EntityType>
+  <Association Name="FK_dbo_Products_dbo_Categories_category_Id">
+    <End Role="Categories" Type="Self.Category" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Categories">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="category_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Products_dbo_StockStatus_stock_Id">
+    <End Role="StockStatus" Type="Self.StockStatu" Multiplicity="0..1" />
+    <End Role="Products" Type="Self.Product" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="StockStatus">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Products">
+        <PropertyRef Name="stock_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CafeteriaDbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Categories" EntityType="Self.Category" />
+    <EntitySet Name="Products" EntityType="Self.Product" />
+    <EntitySet Name="StockStatus" EntityType="Self.StockStatu" />
+    <AssociationSet Name="FK_dbo_Products_dbo_Categories_category_Id" Association="Self.FK_dbo_Products_dbo_Categories_category_Id">
+      <End Role="Categories" EntitySet="Categories" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Products_dbo_StockStatus_stock_Id" Association="Self.FK_dbo_Products_dbo_StockStatus_stock_Id">
+      <End Role="StockStatus" EntitySet="StockStatus" />
+      <End Role="Products" EntitySet="Products" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

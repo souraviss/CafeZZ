@@ -1,0 +1,40 @@
+
+<!-- <div *ngIf="isLoginError" class="error-message">
+
+<i class="material-icons">error</i> Incorrect username or password 
+
+</div> -->
+
+<form #loginForm="ngForm" class="col-md-12" (ngSubmit)="OnSubmit(UserName.value,Password.value)">
+
+ <div class="row">
+    <div class="col-md-12">
+    <!-- <label for="exampleInputEmail1" class="bmd-label-floating">UserName</label> -->
+     <input type="text" class="form-control" #UserName ngModel name="UserName" placeholder="Username" required>
+     <span *ngIf="isLoginError" class="error-message bmd-help">email required.</span>
+    </div>
+ </div>
+
+ <div class="row">
+
+    <div class="col-md-12">
+
+      <!-- <i class="material-icons prefix"></i> -->
+
+      <input type="password" class="form-control" #Password ngModel name="Password" placeholder="Password" required>
+      <span *ngIf="isLoginError" class="error-message bmd-help">Password required.</span>
+    </div>
+
+  </div>
+
+  <div class="row">
+
+      <div class="col-md-12">
+           
+        <button [disabled]="!loginForm.valid" class="btn btn-primary" type="submit">Login</button>
+
+      </div>
+
+    </div>
+
+</form>
